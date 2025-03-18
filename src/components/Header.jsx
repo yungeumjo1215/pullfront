@@ -72,6 +72,9 @@ const CartButton = styled(Link)`
   font-weight: 500;
   transition: color 0.3s ease;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
   &:hover {
     color: ${props => props.theme.colors.primary};
@@ -79,9 +82,6 @@ const CartButton = styled(Link)`
 `;
 
 const CartCount = styled.span`
-  position: absolute;
-  top: -8px;
-  right: -8px;
   background-color: ${props => props.theme.colors.secondary};
   color: white;
   font-size: 0.8rem;

@@ -44,6 +44,10 @@ const MainContent = styled.main`
   min-height: calc(100vh - 60px);
   max-width: 1200px;
   width: 100%;
+  margin: 80px auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   @media (max-width: 768px) {
     padding: 0.5rem;
