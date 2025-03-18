@@ -8,9 +8,34 @@ import Button from '../components/common/Button';
 import { setCartItems, removeItem, updateQuantity, clearCart } from '../redux/slices/cartSlice';
 
 const CartContainer = styled.div`
-  padding: 2rem;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
+`;
+
+const CartTitle = styled.h2`
+  color: ${props => props.theme.colors.text};
+  margin-bottom: 2rem;
+  font-size: ${props => props.theme.typography.fontSize['2xl']};
+`;
+
+const EmptyCart = styled.div`
+  text-align: center;
+  padding: 3rem;
+  background: ${props => props.theme.colors.white};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  box-shadow: ${props => props.theme.shadows.base};
+
+  h3 {
+    color: ${props => props.theme.colors.text};
+    margin-bottom: 1rem;
+    font-size: ${props => props.theme.typography.fontSize.xl};
+  }
+
+  p {
+    color: ${props => props.theme.colors.gray.dark};
+    font-size: ${props => props.theme.typography.fontSize.base};
+  }
 `;
 
 const CartItem = styled(Card)`
@@ -77,16 +102,10 @@ const CheckoutButton = styled(Button)`
   margin-top: 1rem;
 `;
 
-const EmptyCart = styled.div`
-  text-align: center;
-  padding: 2rem;
-  color: ${props => props.theme.text};
-`;
-
 const CartPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { items, loading } = useSelector(state => state.cart);
+  const cartItems = useSelector(state => state.cart?.items || []);
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -123,56 +142,52 @@ const CartPage = () => {
     navigate('/checkout');
   };
 
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  if (loading) return <div>로딩 중...</div>;
-
-  if (items.length === 0) {
-    return (
-      <CartContainer>
-        <EmptyCart>
-          <h2>장바구니가 비어있습니다</h2>
-          <Button onClick={() => navigate('/shop')}>쇼핑하러 가기</Button>
-        </EmptyCart>
-      </CartContainer>
-    );
-  }
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <CartContainer>
-      <h2>장바구니</h2>
-      {items.map(item => (
-        <CartItem key={item.id}>
-          <ItemImage src={item.image} alt={item.name} />
-          <ItemInfo>
-            <ItemName>{item.name}</ItemName>
-            <ItemPrice>{item.price.toLocaleString()}원</ItemPrice>
-          </ItemInfo>
-          <QuantityControl>
-            <QuantityButton
-              onClick={() => handleQuantityChange(item.id, Math.max(1, item.quantity - 1))}
-            >
-              -
-            </QuantityButton>
-            <span>{item.quantity}</span>
-            <QuantityButton
-              onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-            >
-              +
-            </QuantityButton>
-          </QuantityControl>
-          <RemoveButton onClick={() => handleRemoveItem(item.id)}>
-            삭제
-          </RemoveButton>
-        </CartItem>
-      ))}
-      <CartSummary>
-        <h3>주문 요약</h3>
-        <TotalPrice>총 금액: {totalPrice.toLocaleString()}원</TotalPrice>
-        <CheckoutButton onClick={handleCheckout}>
-          주문하기
-        </CheckoutButton>
-      </CartSummary>
+      <CartTitle>장바구니</CartTitle>
+      {cartItems.length === 0 ? (
+        <EmptyCart>
+          <h3>장바구니가 비어있습니다</h3>
+          <p>상품을 추가해주세요</p>
+        </EmptyCart>
+      ) : (
+        <div>
+          {cartItems.map(item => (
+            <CartItem key={item.id}>
+              <ItemImage src={item.image} alt={item.name} />
+              <ItemInfo>
+                <ItemName>{item.name}</ItemName>
+                <ItemPrice>{item.price.toLocaleString()}원</ItemPrice>
+              </ItemInfo>
+              <QuantityControl>
+                <QuantityButton
+                  onClick={() => handleQuantityChange(item.id, Math.max(1, item.quantity - 1))}
+                >
+                  -
+                </QuantityButton>
+                <span>{item.quantity}</span>
+                <QuantityButton
+                  onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                >
+                  +
+                </QuantityButton>
+              </QuantityControl>
+              <RemoveButton onClick={() => handleRemoveItem(item.id)}>
+                삭제
+              </RemoveButton>
+            </CartItem>
+          ))}
+          <CartSummary>
+            <h3>주문 요약</h3>
+            <TotalPrice>총 금액: {totalPrice.toLocaleString()}원</TotalPrice>
+            <CheckoutButton onClick={handleCheckout}>
+              주문하기
+            </CheckoutButton>
+          </CartSummary>
+        </div>
+      )}
     </CartContainer>
   );
 };

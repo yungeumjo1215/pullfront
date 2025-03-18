@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/authSlice';
+import { logout } from '../store/slices/userSlice';
 
 const HeaderContainer = styled.header`
   background-color: ${props => props.theme.colors.white};
@@ -66,14 +66,43 @@ const AdminButton = styled(Button)`
   background-color: ${props => props.theme.colors.secondary};
 `;
 
+const CartButton = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: ${props => props.theme.colors.primary};
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1rem;
+  position: relative;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+const CartCount = styled.span`
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: ${props => props.theme.colors.secondary};
+  color: white;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+`;
+
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated, user } = useSelector(state => state.auth);
+  const { isLoggedIn, isAdmin } = useSelector(state => state.user || {});
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/');
+    navigate('/login');
   };
 
   return (
@@ -84,9 +113,9 @@ const Header = () => {
           <NavLink to="/flower">Flower</NavLink>
           <NavLink to="/plant">Plant</NavLink>
           <NavLink to="/class">Class</NavLink>
-          {isAuthenticated ? (
+          {isLoggedIn ? (
             <>
-              {user?.isAdmin && (
+              {isAdmin && (
                 <AdminButton onClick={() => navigate('/admin')}>
                   관리자 페이지
                 </AdminButton>
@@ -99,6 +128,10 @@ const Header = () => {
               <Button onClick={() => navigate('/register')}>회원가입</Button>
             </>
           )}
+          <CartButton to="/cart">
+            장바구니
+            <CartCount>0</CartCount>
+          </CartButton>
         </NavLinks>
       </Nav>
     </HeaderContainer>
