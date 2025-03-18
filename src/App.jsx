@@ -39,10 +39,10 @@ const AppContainer = styled.div`
 
 const MainContent = styled.main`
   flex: 1;
+  margin-top: 80px;
+  padding: 20px;
   min-height: calc(100vh - 60px);
-  padding: 1rem;
   max-width: 1200px;
-  margin: 0 auto;
   width: 100%;
 
   @media (max-width: 768px) {

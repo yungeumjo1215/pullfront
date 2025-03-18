@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/userSlice';
 
 const HeaderContainer = styled.header`
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${props => props.theme.colors.lightBackground};
   padding: 1rem 2rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
