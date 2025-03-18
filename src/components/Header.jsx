@@ -67,20 +67,14 @@ const AdminButton = styled(Button)`
 `;
 
 const CartButton = styled(Link)`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: ${props => props.theme.colors.primary};
-  color: white;
-  border-radius: 4px;
+  color: ${props => props.theme.colors.text};
   text-decoration: none;
-  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
   position: relative;
-  transition: opacity 0.3s ease;
 
   &:hover {
-    opacity: 0.9;
+    color: ${props => props.theme.colors.primary};
   }
 `;
 
@@ -96,8 +90,8 @@ const CartCount = styled.span`
 `;
 
 const Header = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoggedIn, isAdmin } = useSelector(state => state.user || {});
 
   const handleLogout = () => {
@@ -113,6 +107,10 @@ const Header = () => {
           <NavLink to="/flower">Flower</NavLink>
           <NavLink to="/plant">Plant</NavLink>
           <NavLink to="/class">Class</NavLink>
+          <CartButton to="/cart">
+            장바구니
+            <CartCount>0</CartCount>
+          </CartButton>
           {isLoggedIn ? (
             <>
               {isAdmin && (
@@ -128,10 +126,6 @@ const Header = () => {
               <Button onClick={() => navigate('/register')}>회원가입</Button>
             </>
           )}
-          <CartButton to="/cart">
-            장바구니
-            <CartCount>0</CartCount>
-          </CartButton>
         </NavLinks>
       </Nav>
     </HeaderContainer>
