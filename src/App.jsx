@@ -49,6 +49,11 @@ const MainContent = styled.main`
   flex-direction: column;
   align-items: center;
 
+  > * {
+    width: 100%;
+    max-width: 1200px;
+  }
+
   @media (max-width: 768px) {
     padding: 0.5rem;
   }
