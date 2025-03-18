@@ -1,12 +1,12 @@
 const theme = {
   colors: {
-    primary: '#B8E0D2',
-    secondary: '#D6EADF',
-    background: '#F5F5F5',
+    primary: '#2E7D32',
+    secondary: '#4CAF50',
+    background: '#F5E6D3',
     white: '#FFFFFF',
     text: '#4A4A4A',
     error: '#FF6B6B',
-    success: '#B8E0D2',
+    success: '#2E7D32',
     warning: '#FFD93D',
     info: '#64B5F6',
     gray: {
