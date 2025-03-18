@@ -64,7 +64,7 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -82,6 +82,16 @@ const LoginPage = () => {
     setError('');
 
     try {
+      // 관리자 계정 확인
+      if (formData.username === 'pull0216' && formData.password === '0216') {
+        dispatch(loginSuccess({ 
+          username: formData.username, 
+          isAdmin: true 
+        }));
+        navigate('/admin');
+        return;
+      }
+
       dispatch(loginStart());
       const response = await api.auth.login(formData);
       const { token, user } = response.data;
@@ -90,7 +100,7 @@ const LoginPage = () => {
       dispatch(loginSuccess(user));
       navigate('/');
     } catch (err) {
-      const errorMessage = err.response?.data?.message || '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.';
+      const errorMessage = err.response?.data?.message || '로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.';
       setError(errorMessage);
       dispatch(loginFailure(errorMessage));
     }
@@ -102,14 +112,14 @@ const LoginPage = () => {
         <Title>로그인</Title>
         <Form onSubmit={handleSubmit}>
           <FormGroup>
-            <Label htmlFor="email">이메일</Label>
+            <Label htmlFor="username">아이디</Label>
             <Input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
-              placeholder="이메일을 입력하세요"
+              placeholder="아이디를 입력하세요"
               required
             />
           </FormGroup>

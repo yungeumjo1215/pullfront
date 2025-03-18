@@ -23,8 +23,15 @@ api.interceptors.request.use(
 
 // 사용자 관련 API
 const auth = {
-  login: (credentials) => api.post('/auth/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
+  login: (credentials) => api.post('/auth/login', {
+    username: credentials.username,
+    password: credentials.password
+  }),
+  register: (userData) => api.post('/auth/register', {
+    username: userData.username,
+    password: userData.password,
+    email: userData.email
+  }),
   logout: () => api.post('/auth/logout'),
   checkAuth: () => api.get('/auth/check'),
 };
@@ -55,9 +62,21 @@ const orders = {
   updateOrderStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
 };
 
+// 관리자 관련 API
+const admin = {
+  getContent: () => api.get('/admin/content'),
+  updateContent: (content) => api.put('/admin/content', content),
+  uploadImage: (formData) => api.post('/admin/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+};
+
 export default {
   auth,
   products,
   cart,
   orders,
+  admin
 }; 
